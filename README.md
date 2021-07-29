@@ -1,5 +1,17 @@
 # Apochromat
 
+[![][ci-badge]][ci-link] [![][version-badge]][version-link]
+[![][license-badge]][license-link] [![][types-badge]][types-link]
+
+[ci-badge]: https://github.com/clebert/apochromat/workflows/CI/badge.svg
+[ci-link]: https://github.com/clebert/apochromat
+[version-badge]: https://badgen.net/npm/v/apochromat
+[version-link]: https://www.npmjs.com/package/apochromat
+[license-badge]: https://badgen.net/npm/license/apochromat
+[license-link]: https://github.com/clebert/apochromat/blob/master/LICENSE
+[types-badge]: https://badgen.net/npm/types/apochromat
+[types-link]: https://github.com/clebert/apochromat
+
 Declarative programming of interactive CLI applications.
 
 **This software is still in a very experimental state.**
