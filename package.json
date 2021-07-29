@@ -1,6 +1,6 @@
 {
   "name": "apochromat",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Declarative programming of interactive CLI applications.",
   "bugs": {
     "url": "https://github.com/clebert/apochromat/issues"
