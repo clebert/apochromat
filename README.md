@@ -45,7 +45,7 @@ const Greeting = component((props) => {
   const [salutation, setSalutation] = useState('Hello');
 
   useEffect(() => {
-    const handle = setTimeout(() => setSalutation('Bye'), 500);
+    const handle = setTimeout(() => setSalutation('Bye'), 1000);
 
     return () => clearTimeout(handle);
   }, []);
