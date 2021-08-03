@@ -1,81 +1,83 @@
 import {Host} from 'batis';
-import {ComponentInstance} from './component.js';
-
-export interface RenderToStringOptions {
-  readonly node?: ComponentNode;
-
-  onAsyncStateChange?(error: unknown): void;
-}
+import {ComponentInstance} from './component';
 
 export interface ComponentNode {
   readonly uid: symbol;
-  readonly host: Host<(instance: ComponentInstance<any>) => string>;
+
+  readonly host: Host<
+    (instance: ComponentInstance<any>) => [string, Promise<void>]
+  >;
 }
 
 const {useRef} = Host.Hooks;
 
 export function renderToString(
   instance: ComponentInstance<any>,
-  {node, onAsyncStateChange}: RenderToStringOptions = {}
-): [string, ComponentNode] {
+  node?: ComponentNode
+): [string, ComponentNode, Promise<void>] {
   if (instance.uid !== node?.uid) {
     node?.host.reset();
 
     node = {
       uid: instance.uid,
-      host: new Host(
-        ({props, render}) => {
-          const childNodesRef = useRef<readonly ComponentNode[]>([]);
-          const childNodesIterator = childNodesRef.current[Symbol.iterator]();
-          const childNodes: ComponentNode[] = [];
-          const {strings, values} = render(props);
+      host: new Host(({props, render}) => {
+        const childNodesRef = useRef<readonly ComponentNode[]>([]);
+        const childNodesIterator = childNodesRef.current[Symbol.iterator]();
+        const childNodes: ComponentNode[] = [];
+        const childSignals: Promise<void>[] = [];
+        const {strings, values} = render(props);
 
-          let text = strings[0]!;
+        let text = strings[0]!;
 
-          for (let index = 0; index < values.length; index += 1) {
-            const string = strings[index + 1]!;
-            const value = values[index]!;
+        for (let index = 0; index < values.length; index += 1) {
+          const string = strings[index + 1]!;
+          const value = values[index]!;
 
-            switch (typeof value) {
-              case 'bigint':
-              case 'boolean':
-              case 'number':
-              case 'string': {
-                text += String(value) + string;
+          switch (typeof value) {
+            case 'bigint':
+            case 'boolean':
+            case 'number':
+            case 'string': {
+              text += String(value) + string;
 
-                break;
-              }
-              default: {
-                const result = renderToString(value, {
-                  node: childNodesIterator.next().value,
-                  onAsyncStateChange,
-                });
-
-                childNodes.push(result[1]);
-
-                text += result[0] + string;
-              }
-            }
-          }
-
-          while (true) {
-            const {done, value} = childNodesIterator.next();
-
-            if (done) {
               break;
             }
+            default: {
+              const [childText, childNode, childSignal] = renderToString(
+                value,
+                childNodesIterator.next().value
+              );
 
-            (value as ComponentNode).host.reset();
+              text += childText + string;
+
+              childNodes.push(childNode);
+              childSignals.push(childSignal);
+            }
+          }
+        }
+
+        while (true) {
+          const {done, value} = childNodesIterator.next();
+
+          if (done) {
+            break;
           }
 
-          childNodesRef.current = childNodes;
+          (value as ComponentNode).host.reset();
+        }
 
-          return text;
-        },
-        {onAsyncStateChange}
-      ),
+        childNodesRef.current = childNodes;
+
+        return [text, Promise.race(childSignals)];
+      }),
     };
   }
 
-  return [node.host.render(instance)[0], node];
+  const [result] = node.host.render(instance);
+
+  return [
+    result[0],
+    node,
+    Promise.race([node.host.nextAsyncStateChange, result[1]]),
+  ];
 }

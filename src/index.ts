@@ -5,8 +5,8 @@ const {useCallback, useEffect, useMemo, useReducer, useRef, useState} =
 
 export {useCallback, useEffect, useMemo, useReducer, useRef, useState};
 
-export * from './component.js';
-export * from './render-to-string.js';
-export * from './render-to-tty.js';
-export * from './template.js';
-export * from './write-to-tty.js';
+export * from './component';
+export * from './render-to-string';
+export * from './render-to-tty';
+export * from './template';
+export * from './write-to-tty';

@@ -3,7 +3,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["ES2017"],
+    "lib": ["DOM", "ES2017"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "noFallthroughCasesInSwitch": true,
@@ -13,8 +13,6 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "lib",
-    "rootDir": "src",
     "strict": true,
     "target": "ES2017"
   },

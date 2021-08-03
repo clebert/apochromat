@@ -1,40 +1,30 @@
-import {ComponentInstance} from './component.js';
-import {Deferred, defer} from './defer.js';
-import {ComponentNode, renderToString} from './render-to-string.js';
-import {writeToTTY} from './write-to-tty.js';
+import {ComponentInstance} from './component';
+import {ComponentNode, renderToString} from './render-to-string';
+import {writeToTTY} from './write-to-tty';
 
 export async function renderToTTY(
   instance: ComponentInstance<any>
 ): Promise<never> {
-  let deferred: Deferred<void>;
   let lines: readonly string[] | undefined;
-  let node: ComponentNode | undefined;
+  let prevNode: ComponentNode | undefined;
 
   while (true) {
-    deferred = defer();
+    const [text, node, signal] = renderToString(instance, prevNode);
 
-    const result = renderToString(instance, {
-      node,
-      onAsyncStateChange: (error) => {
-        if (error) {
-          deferred.reject(
-            error instanceof Error ? error : new Error(String(error))
-          );
-        } else {
-          deferred.resolve();
-        }
-      },
-    });
+    lines = writeToTTY(process.stdout, text.split('\n'), lines);
+    prevNode = node;
 
-    lines = writeToTTY(process.stdout, result[0].split('\n'), lines);
-    node = result[1];
+    let rerender: () => void;
 
-    const rerender = () => deferred.resolve();
+    const resizeListener = () => rerender();
 
-    process.stdout.once('resize', () => rerender);
+    process.stdout.once('resize', resizeListener);
 
-    await deferred.promise;
+    await Promise.race([
+      signal,
+      new Promise<void>((resolve) => (rerender = resolve)),
+    ]);
 
-    process.stdout.off('resize', rerender);
+    process.stdout.off('resize', resizeListener);
   }
 }

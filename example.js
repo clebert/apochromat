@@ -1,17 +1,17 @@
 // @ts-check
 
-import {
+const {
   component,
   renderToTTY,
   template,
   useEffect,
   useState,
-} from './lib/index.js';
+} = require('./lib/cjs/index.js');
 
-/** @type {import('./lib/index.js').Component} */
+/** @type {import('./lib/cjs/index.js').Component} */
 const App = component(() => template`> ${Greeting({name: 'World'})}`);
 
-/** @type {import('./lib/index.js').Component<{readonly name: string}>} */
+/** @type {import('./lib/cjs/index.js').Component<{readonly name: string}>} */
 const Greeting = component((props) => {
   const [salutation, setSalutation] = useState('Hello');
 

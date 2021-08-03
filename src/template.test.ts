@@ -1,4 +1,4 @@
-import {template} from './template.js';
+import {template} from './template';
 
 describe('template()', () => {
   it('removes the first and or last line if they are blank', () => {
