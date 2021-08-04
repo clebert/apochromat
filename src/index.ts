@@ -6,7 +6,6 @@ const {useCallback, useEffect, useMemo, useReducer, useRef, useState} =
 export {useCallback, useEffect, useMemo, useReducer, useRef, useState};
 
 export * from './component';
-export * from './render-to-string';
-export * from './render-to-tty';
+export * from './print';
+export * from './render';
 export * from './template';
-export * from './write-to-tty';

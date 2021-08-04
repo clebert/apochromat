@@ -1,7 +1,7 @@
 import stringWidth from 'string-width';
 import {WriteStream} from 'tty';
 
-export function writeToTTY(
+export function print(
   stream: WriteStream,
   lines: readonly string[],
   prevLines: readonly string[] = []

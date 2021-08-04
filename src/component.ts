@@ -1,21 +1,27 @@
 export type Component<TProps = undefined> = TProps extends undefined
-  ? () => ComponentInstance<undefined>
-  : (props: TProps) => ComponentInstance<TProps>;
+  ? (options?: ComponentOptions<TProps>) => ComponentInstance<TProps>
+  : (options: ComponentOptions<TProps>) => ComponentInstance<TProps>;
+
+export type ComponentOptions<TProps> = TProps extends undefined
+  ? {readonly key?: string; readonly props?: TProps}
+  : {readonly key?: string; readonly props: TProps};
 
 export interface ComponentInstance<TProps> {
-  readonly uid: symbol;
+  readonly type: symbol;
+  readonly key?: string;
   readonly props: TProps;
 
   render(props: TProps): Template;
 }
 
 export interface Template {
-  readonly strings: readonly string[];
+  readonly strings: readonly [string, ...string[]];
   readonly values: readonly TemplateValue[];
 }
 
 export type TemplateValue =
   | ComponentInstance<any>
+  | readonly [string, ...ComponentInstance<any>[]]
   | bigint
   | boolean
   | number
@@ -24,7 +30,12 @@ export type TemplateValue =
 export function component<TProps>(
   render: (props: TProps) => Template
 ): Component<TProps> {
-  const uid = Symbol();
+  const type = Symbol();
 
-  return ((props) => ({uid, props, render})) as Component<TProps>;
+  return ((options?: ComponentOptions<TProps>) => ({
+    type,
+    key: options?.key,
+    props: options?.props,
+    render,
+  })) as Component<TProps>;
 }

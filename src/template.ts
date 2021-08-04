@@ -4,6 +4,10 @@ export function template(
   strings: readonly string[],
   ...values: readonly TemplateValue[]
 ): Template {
+  if (strings.length === 0) {
+    throw new Error('Illegal arguments.');
+  }
+
   return {
     strings: strings.map((string, index) => {
       let lines = string.split('\n');
@@ -35,7 +39,7 @@ export function template(
       }
 
       return string;
-    }),
+    }) as [string, ...string[]],
     values,
   };
 }

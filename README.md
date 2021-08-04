@@ -29,7 +29,8 @@ npm install apochromat --save
 ```js
 import {
   component,
-  renderToTTY,
+  print,
+  render,
   template,
   useEffect,
   useState,
@@ -37,7 +38,14 @@ import {
 ```
 
 ```js
-const App = component(() => template`> ${Greeting({name: 'World'})}`);
+const App = component(
+  () =>
+    template`> ${[
+      '\n> ',
+      Greeting({key: 'world', props: {name: 'World'}}),
+      Greeting({key: 'universe', props: {name: 'Universe'}}),
+    ]}`
+);
 ```
 
 ```js
@@ -55,9 +63,11 @@ const Greeting = component((props) => {
 ```
 
 ```js
-renderToTTY(App()).catch((error) => {
-  console.error('Oops!', error);
-});
+let prevLines;
+
+for await (const text of render(App())) {
+  prevLines = print(process.stdout, text.split('\n'), prevLines);
+}
 ```
 
 ---

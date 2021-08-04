@@ -56,4 +56,8 @@ describe('template()', () => {
       values: [1, 2],
     });
   });
+
+  it('throws an illegal arguments error', () => {
+    expect(() => template([])).toThrow(new Error('Illegal arguments.'));
+  });
 });
