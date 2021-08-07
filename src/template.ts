@@ -1,4 +1,4 @@
-import {Template, TemplateValue} from './component';
+import type {Template, TemplateValue} from './component';
 
 export function template(
   strings: readonly string[],

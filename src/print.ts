@@ -1,5 +1,5 @@
 import stringWidth from 'string-width';
-import {WriteStream} from 'tty';
+import type {WriteStream} from 'tty';
 
 export function print(
   stream: WriteStream,

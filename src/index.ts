@@ -9,3 +9,4 @@ export * from './component';
 export * from './print';
 export * from './render';
 export * from './template';
+export * from './use-component';
