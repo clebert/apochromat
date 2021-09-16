@@ -1,41 +1,18 @@
 // @ts-check
 
-const {
-  component,
-  print,
-  render,
-  template,
-  useEffect,
-  useState,
-} = require('./lib/cjs/index.js');
+const {Lens} = require('./lib/cjs');
+const greeting = new Lens();
+const salutation = new Lens();
+const subject = new Lens();
 
-/** @type {import('./lib/cjs/index.js').Component} */
-const App = component(
-  () =>
-    template`> ${[
-      '\n> ',
-      Greeting({key: 'world', props: {name: 'World'}}),
-      Greeting({key: 'universe', props: {name: 'Universe'}}),
-    ]}`
-);
-
-/** @type {import('./lib/cjs/index.js').Component<{readonly name: string}>} */
-const Greeting = component((props) => {
-  const [salutation, setSalutation] = useState('Hello');
-
-  useEffect(() => {
-    const handle = setTimeout(() => setSalutation('Bye'), 1000);
-
-    return () => clearTimeout(handle);
-  }, []);
-
-  return template`${salutation} ${props.name}!`;
+greeting.subscribe((event) => {
+  if (event === 'render') {
+    console.log(greeting.frame);
+  }
 });
 
-(async () => {
-  let prevLines;
-
-  for await (const text of render(App())) {
-    prevLines = print(process.stdout, text.split('\n'), prevLines);
-  }
-})().catch((error) => console.error(error));
+salutation.render`Hi`;
+subject.render`everyone`;
+greeting.render`${salutation}, ${subject}!`;
+subject.render`world`;
+salutation.render`Hello`;

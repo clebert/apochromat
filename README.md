@@ -1,20 +1,16 @@
 # Apochromat
 
 [![][ci-badge]][ci-link] [![][version-badge]][version-link]
-[![][license-badge]][license-link] [![][types-badge]][types-link]
+[![][license-badge]][license-link]
 
 [ci-badge]: https://github.com/clebert/apochromat/workflows/CI/badge.svg
 [ci-link]: https://github.com/clebert/apochromat
 [version-badge]: https://badgen.net/npm/v/apochromat
 [version-link]: https://www.npmjs.com/package/apochromat
 [license-badge]: https://badgen.net/npm/license/apochromat
-[license-link]: https://github.com/clebert/apochromat/blob/master/LICENSE
-[types-badge]: https://badgen.net/npm/types/apochromat
-[types-link]: https://github.com/clebert/apochromat
+[license-link]: https://github.com/clebert/apochromat/blob/master/LICENSE.md
 
-Declarative programming of interactive CLI applications.
-
-**This software is still in a very experimental state.**
+Rendering text using objects managed in a tree structure.
 
 ## Getting started
 
@@ -27,50 +23,45 @@ npm install apochromat --save
 ### Using Apochromat
 
 ```js
-import {
-  component,
-  print,
-  render,
-  template,
-  useEffect,
-  useState,
-} from 'apochromat';
-```
+import {Lens} from 'apochromat';
 
-```js
-const App = component(
-  () =>
-    template`> ${[
-      '\n> ',
-      Greeting({key: 'world', props: {name: 'World'}}),
-      Greeting({key: 'universe', props: {name: 'Universe'}}),
-    ]}`
-);
-```
+const greeting = new Lens();
+const salutation = new Lens();
+const subject = new Lens();
 
-```js
-const Greeting = component((props) => {
-  const [salutation, setSalutation] = useState('Hello');
-
-  useEffect(() => {
-    const handle = setTimeout(() => setSalutation('Bye'), 1000);
-
-    return () => clearTimeout(handle);
-  }, []);
-
-  return template`${salutation} ${props.name}!`;
+greeting.subscribe((event) => {
+  if (event === 'render') {
+    console.log(greeting.frame);
+  }
 });
+
+salutation.render`Hi`;
+subject.render`everyone`;
+greeting.render`${salutation}, ${subject}!`;
+subject.render`world`;
+salutation.render`Hello`;
 ```
 
-```js
-let prevLines;
+```
+Hi, everyone!
+Hi, world!
+Hello, world!
+```
 
-for await (const text of render(App())) {
-  prevLines = print(process.stdout, text.split('\n'), prevLines);
+## Types
+
+```ts
+type LensListener = (event: LensEvent) => void;
+type LensEvent = 'attach' | 'detach' | 'render';
+
+class Lens {
+  get frame(): string;
+  render(segments: readonly string[], ...children: readonly Lens[]): boolean;
+  subscribe(listener: LensListener): () => void;
 }
 ```
 
 ---
 
-Copyright (c) 2021, Clemens Akens. Released under the terms of the
-[MIT License](https://github.com/clebert/apochromat/blob/master/LICENSE).
+Copyright 2021 Clemens Akens. All rights reserved.
+[MIT license](https://github.com/clebert/apochromat/blob/master/LICENSE.md).
