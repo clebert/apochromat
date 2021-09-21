@@ -1,6 +1,6 @@
 {
   "name": "apochromat",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Rendering text using objects managed in a tree structure.",
   "bugs": {
     "url": "https://github.com/clebert/apochromat/issues"
