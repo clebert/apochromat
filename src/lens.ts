@@ -5,24 +5,31 @@ export class Lens {
   readonly #listeners = new Set<LensListener>();
 
   #segments: readonly string[] = [''];
-  #children: readonly Lens[] = [];
+  #children: readonly unknown[] = [];
   #parent?: Lens;
 
   get frame(): string {
     let frame = this.#segments[0]!;
 
     for (let index = 0; index < this.#children.length; index += 1) {
-      frame += this.#children[index]!.frame + this.#segments[index + 1];
+      const child = this.#children[index]!;
+
+      frame +=
+        (child instanceof Lens ? child.frame : String(child)) +
+        this.#segments[index + 1];
     }
 
     return frame;
   }
 
-  render(segments: readonly string[], ...children: readonly Lens[]): boolean {
+  render(
+    segments: readonly string[],
+    ...children: readonly unknown[]
+  ): boolean {
     const prevChildren = new Set(this.#children);
 
     for (const child of children) {
-      if (!prevChildren.has(child) && child.#parent) {
+      if (child instanceof Lens && !prevChildren.has(child) && child.#parent) {
         return false;
       }
     }
@@ -30,15 +37,17 @@ export class Lens {
     for (const child of children) {
       if (prevChildren.has(child)) {
         prevChildren.delete(child);
-      } else {
+      } else if (child instanceof Lens) {
         child.#parent = this;
         child.#publish('attach');
       }
     }
 
     for (const child of prevChildren) {
-      child.#parent = undefined;
-      child.#publish('detach');
+      if (child instanceof Lens) {
+        child.#parent = undefined;
+        child.#publish('detach');
+      }
     }
 
     this.#segments = segments;
@@ -65,7 +74,9 @@ export class Lens {
 
     if (event === 'attach' || event === 'detach') {
       for (const child of this.#children) {
-        child.#publish(event);
+        if (child instanceof Lens) {
+          child.#publish(event);
+        }
       }
     } else if (event === 'render' && this.#parent) {
       this.#parent.#publish(event);

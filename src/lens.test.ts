@@ -17,7 +17,7 @@ describe('Lens', () => {
     c.subscribe(listeners[2]);
     d.subscribe(listeners[3]);
 
-    expect(b.render`bar ${c}`).toBe(true);
+    expect(b.render`${'bar'} ${c}`).toBe(true);
     expect(a.frame).toBe('');
     expect(b.frame).toBe('bar ');
     expect(c.frame).toBe('');
@@ -25,8 +25,8 @@ describe('Lens', () => {
     eventsB.push(['render']);
     eventsC.push(['attach']);
 
-    expect(a.render`foo ${b} ${c} ${d}`).toBe(false);
-    expect(a.render`foo ${b} ${d}`).toBe(true);
+    expect(a.render`${'foo'} ${b} ${c} ${d}`).toBe(false);
+    expect(a.render`${'foo'} ${b} ${d}`).toBe(true);
     expect(a.frame).toBe('foo bar  ');
     expect(b.frame).toBe('bar ');
     expect(c.frame).toBe('');
@@ -36,7 +36,7 @@ describe('Lens', () => {
     eventsC.push(['attach']);
     eventsD.push(['attach']);
 
-    expect(c.render`baz`).toBe(true);
+    expect(c.render`${'baz'}`).toBe(true);
     expect(a.frame).toBe('foo bar baz ');
     expect(b.frame).toBe('bar baz');
     expect(c.frame).toBe('baz');
@@ -45,7 +45,7 @@ describe('Lens', () => {
     eventsB.push(['render']);
     eventsC.push(['render']);
 
-    expect(d.render`qux`).toBe(true);
+    expect(d.render`${'qux'}`).toBe(true);
     expect(a.frame).toBe('foo bar baz qux');
     expect(b.frame).toBe('bar baz');
     expect(c.frame).toBe('baz');
@@ -53,8 +53,8 @@ describe('Lens', () => {
     eventsA.push(['render']);
     eventsD.push(['render']);
 
-    expect(a.render`foo ${d}`).toBe(true);
-    expect(a.frame).toBe('foo qux');
+    expect(a.render`${'foobar'} ${d}`).toBe(true);
+    expect(a.frame).toBe('foobar qux');
     expect(b.frame).toBe('bar baz');
     expect(c.frame).toBe('baz');
     expect(d.frame).toBe('qux');
@@ -62,8 +62,8 @@ describe('Lens', () => {
     eventsB.push(['detach']);
     eventsC.push(['detach']);
 
-    expect(a.render`foo ${b}`).toBe(true);
-    expect(a.frame).toBe('foo bar baz');
+    expect(a.render`${'foobar'} ${b}`).toBe(true);
+    expect(a.frame).toBe('foobar bar baz');
     expect(b.frame).toBe('bar baz');
     expect(c.frame).toBe('baz');
     expect(d.frame).toBe('qux');

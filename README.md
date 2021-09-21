@@ -54,7 +54,7 @@ type LensEvent = 'attach' | 'detach' | 'render';
 
 class Lens {
   get frame(): string;
-  render(segments: readonly string[], ...children: readonly Lens[]): boolean;
+  render(segments: readonly string[], ...children: readonly unknown[]): boolean;
   subscribe(listener: LensListener): () => void;
 }
 ```
