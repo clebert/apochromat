@@ -1,4 +1,4 @@
-# Apochromat
+# apochromat
 
 [![][ci-badge]][ci-link] [![][version-badge]][version-link]
 [![][license-badge]][license-link]
@@ -12,15 +12,13 @@
 
 Rendering text using objects managed in a tree structure.
 
-## Getting started
-
-### Installing Apochromat
+## Installation
 
 ```
 npm install apochromat --save
 ```
 
-### Using Apochromat
+## Usage
 
 ```js
 import {Lens} from 'apochromat';
