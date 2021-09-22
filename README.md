@@ -28,6 +28,8 @@ npm install apochromat --save
 
 ## Usage
 
+### Hello World
+
 ```js
 import {Lens} from 'apochromat';
 
@@ -54,6 +56,27 @@ Hi, world!
 Hello, world!
 ```
 
+### Rendering of dynamic lists
+
+```js
+import {Lens, list} from 'apochromat';
+
+const foobarbaz = new Lens();
+const foo = new Lens();
+const bar = new Lens();
+const baz = new Lens();
+
+foo.render`foo`;
+bar.render`bar`;
+baz.render`baz`;
+foobarbaz.render(...list(',', foo, bar, baz));
+console.log(foobarbaz.frame);
+```
+
+```
+foo,bar,baz
+```
+
 ## Types
 
 ```ts
@@ -65,6 +88,13 @@ class Lens {
   render(segments: readonly string[], ...children: readonly unknown[]): boolean;
   subscribe(listener: LensListener): () => void;
 }
+```
+
+```ts
+function list(
+  delimiter: string,
+  ...elements: readonly unknown[]
+): [readonly string[], ...(readonly unknown[])];
 ```
 
 ---

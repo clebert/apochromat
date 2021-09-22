@@ -1,4 +1,4 @@
-import {Lens, LensEvent} from './lens';
+import {Lens, LensEvent} from '.';
 
 describe('Lens', () => {
   test('rendering', () => {

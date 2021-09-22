@@ -1,6 +1,6 @@
 // @ts-check
 
-const {Lens} = require('./lib/cjs');
+const {Lens, list} = require('./lib/cjs');
 const greeting = new Lens();
 const salutation = new Lens();
 const subject = new Lens();
@@ -16,3 +16,14 @@ subject.render`everyone`;
 greeting.render`${salutation}, ${subject}!`;
 subject.render`world`;
 salutation.render`Hello`;
+
+const foobarbaz = new Lens();
+const foo = new Lens();
+const bar = new Lens();
+const baz = new Lens();
+
+foo.render`foo`;
+bar.render`bar`;
+baz.render`baz`;
+foobarbaz.render(...list(',', foo, bar, baz));
+console.log(foobarbaz.frame);
