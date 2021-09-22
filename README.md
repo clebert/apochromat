@@ -12,6 +12,14 @@
 
 Dynamic text rendering for interactive command line apps.
 
+- [**@apochromat/print**][apochromat-print]: Dynamic text output for interactive
+  command line apps.
+- [**@apochromat/animation**][apochromat-animation]: Dynamic text animations for
+  interactive command line apps.
+
+[apochromat-animation]: https://github.com/clebert/apochromat-animation
+[apochromat-print]: https://github.com/clebert/apochromat-print
+
 ## Installation
 
 ```
