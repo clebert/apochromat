@@ -1,6 +1,6 @@
 {
   "name": "apochromat",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Dynamic text rendering for interactive command line apps.",
   "bugs": {
     "url": "https://github.com/clebert/apochromat/issues"
