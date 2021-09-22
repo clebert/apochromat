@@ -10,7 +10,7 @@
 [license-badge]: https://badgen.net/npm/license/apochromat
 [license-link]: https://github.com/clebert/apochromat/blob/master/LICENSE.md
 
-Rendering text using objects managed in a tree structure.
+Dynamic text rendering for interactive command line apps.
 
 ## Installation
 
