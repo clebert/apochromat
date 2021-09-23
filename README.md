@@ -10,6 +10,10 @@
 [license-badge]: https://badgen.net/npm/license/apochromat
 [license-link]: https://github.com/clebert/apochromat/blob/master/LICENSE.md
 
+**This project will not be further developed. You may be interested in the
+conceptually similar successor project
+[`reactmpl`](https://github.com/clebert/reactmpl).**
+
 Dynamic text rendering for interactive command line apps.
 
 - [**@apochromat/print**][apochromat-print]: Dynamic text output for interactive
